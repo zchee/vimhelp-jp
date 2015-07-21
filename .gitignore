@@ -2,3 +2,5 @@
 /Procfile.development
 /Guardfile
 /test_vimhelp
+!/plugins/tags
+!/plugins/tags-jp

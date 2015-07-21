@@ -11,9 +11,6 @@ require "haml"
 require 'sinatra/reloader' if development?
 require 'rdiscount'
 require 'addressable/uri'
-require 'logger'
-
-logger = Logger.new('sinatra.log')
 
 # set :markdown, :layout_engine => :haml, :layout => :pos
 

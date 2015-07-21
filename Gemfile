@@ -4,6 +4,7 @@ gem 'sinatra'
 gem 'haml'
 gem 'rdiscount'
 gem 'foreman'
+gem 'addressable'
 
 group :development do
   gem 'sinatra-contrib'

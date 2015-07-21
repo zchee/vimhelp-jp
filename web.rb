@@ -18,7 +18,8 @@ require 'rdiscount'
 load "vimhelp.rb"
 
 $stdout.sync = true
-
+# Disable only serving localhosh in development mode
+set :bind, '0.0.0.0'
 
 root = "plugins"
 tagfiles = ["tags-ja", "tags"]

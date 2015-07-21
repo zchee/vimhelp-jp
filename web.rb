@@ -12,13 +12,22 @@ require 'sinatra/reloader' if development?
 require 'rdiscount'
 require 'addressable/uri'
 
+configure do
+  # logging is enabled by default in classic style applications,
+  # so `enable :logging` is not needed
+  file = File.new("#{settings.root}/log/#{settings.environment}.log", 'a+')
+  file.sync = true
+  use Rack::CommonLogger, file
+end
+
+
 # set :markdown, :layout_engine => :haml, :layout => :pos
 
 
 load "vimhelp.rb"
 
 $stdout.sync = true
-# Disable only serving localhosh in development mode
+# Disable only serving localhost in development mode
 set :bind, '0.0.0.0'
 
 
@@ -134,20 +143,31 @@ def post_slack_help(channel, query, vimhelp)
   Thread.start do
   url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
     help = vimhelp.search(query, "Not found.")
-    result = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp.slice(0, 1000)
-    param = {
-      token: ENV['SLACK_API_TOKEN'],
-      channel: channel,
-      text: result,
-      username: 'vimhelp-jp',
-      icon_url: ENV['SLACK_BOT_ICON_URL']
-    }
+    result_raw = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp
 
-    query_string = param.map {|e|
-      e.map {|s| ERB::Util.url_encode s.to_s }.join '='
-    }.join '&'
+    results = []
+    if result_raw.length >= 1400
+      results.push result_raw.slice(0, 1400)
+      results.push result_raw.slice(1400, 2800)
+    else
+      results.push result_raw.slice(0, 1400)
+    end
 
-    open "https://slack.com/api/chat.postMessage?#{query_string}&pretty=1"
+    for result in results.each do
+      param = {
+        token: ENV['SLACK_API_TOKEN'],
+        channel: channel,
+        text: result,
+        username: 'vimhelp-jp',
+        icon_url: ENV['SLACK_BOT_ICON_URL']
+      }
+
+      query_string = param.map {|e|
+        e.map {|s| ERB::Util.url_encode s.to_s }.join '='
+      }.join '&'
+
+      open "https://slack.com/api/chat.postMessage?#{query_string}&pretty=1"
+    end
   end
 end
 
@@ -207,4 +227,3 @@ get '/search/' do
 	query  = params[:query]
 	redirect "./?query=" + query
 end
-

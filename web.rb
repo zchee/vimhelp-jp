@@ -109,7 +109,7 @@ end
 # -------------------- lingr-bot --------------------
 def post_lingr_help(room, query, vimhelp)
 	Thread.start do
-		url = "#{vimhelp_url}##{ERB::Util.url_encode query}"
+  url = "http://ec2-52-69-10-39.ap-northeast-1.compute.amazonaws.com/##{ERB::Util.url_encode query}"
 # 		url = "http://vim-help-jp.herokuapp.com/?query=#{ERB::Util.url_encode query}"
 		help = vimhelp.search(query, "Not found.")
 		result = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp.slice(0, 1000)
@@ -129,8 +129,28 @@ def post_lingr_help(room, query, vimhelp)
 		open "http://lingr.com/api/room/say?#{query_string}"
 	end
 end
-
-
+# Slack API URL
+# https://slack.com/api/chat.postMessage?token=xoxp-3263606207-3263606209-4878801388-c12522&channel=%23sandbox&text=test-text&username=vimhelp-jp&pretty=1
+# [
+#   {
+#     "fallback": "ReferenceError - UI is not definied: https://honeybadger.io/path/to/event/",
+#     "text": "<https://honeybadger.io/path/to/event/|ReferenceError> - UI is not defined",
+#     "fields": [
+#       {
+#         "title": "Project",
+#         "value": "Awesome Project",
+#         "short": true
+#       },
+#       {
+#         "title": "Environment",
+#         "value": "production",
+#         "short": true
+#       }
+#     ],
+#     "color": "#F35A00"
+#   }
+# ]
+#
 post '/lingr/vimhelpjp' do
 	content_type :text
 	json = JSON.parse(request.body.string)

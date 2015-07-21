@@ -8,4 +8,6 @@ COPY Gemfile /usr/src/app/
 RUN bundle install
 
 COPY . /usr/src/app
-CMD ruby web.rb -p $PORT
+
+EXPOSE 80
+CMD ["/usr/local/bundle/bin/foreman","start","-d","/usr/src/app"]

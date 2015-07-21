@@ -8,4 +8,4 @@ COPY Gemfile /usr/src/app/
 RUN bundle install
 
 COPY . /usr/src/app
-CMD bundle exec ruby web.rb -p $PORT
+CMD ruby web.rb -p $PORT

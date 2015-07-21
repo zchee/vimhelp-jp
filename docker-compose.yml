@@ -1,0 +1,7 @@
+bot:
+  build: .
+  env_file:
+    - .env
+  ports:
+    - 80:80
+  restart: always

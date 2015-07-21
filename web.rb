@@ -10,7 +10,10 @@ require "cgi"
 require "haml"
 require 'sinatra/reloader' if development?
 require 'rdiscount'
+require 'addressable/uri'
+require 'logger'
 
+logger = Logger.new('sinatra.log')
 
 # set :markdown, :layout_engine => :haml, :layout => :pos
 
@@ -21,7 +24,7 @@ $stdout.sync = true
 # Disable only serving localhosh in development mode
 set :bind, '0.0.0.0'
 
-vimhelp_url = ENV['VIMHELP_URL']
+
 
 root = "plugins"
 tagfiles = ["tags-ja", "tags"]
@@ -109,7 +112,7 @@ end
 # -------------------- lingr-bot --------------------
 def post_lingr_help(room, query, vimhelp)
 	Thread.start do
-  url = "http://ec2-52-69-10-39.ap-northeast-1.compute.amazonaws.com/##{ERB::Util.url_encode query}"
+  url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
 # 		url = "http://vim-help-jp.herokuapp.com/?query=#{ERB::Util.url_encode query}"
 		help = vimhelp.search(query, "Not found.")
 		result = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp.slice(0, 1000)
@@ -117,7 +120,7 @@ def post_lingr_help(room, query, vimhelp)
 # 		result = (help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
 		param = {
 			room: room,
-			bot: 'vimhelpjp',
+			bot: 'vimhelpjp_test',
 			text: result,
 			bot_verifier: ENV['LINGR_BOT_KEY']
 		}.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot] + p[:bot_verifier]) }
@@ -127,6 +130,30 @@ def post_lingr_help(room, query, vimhelp)
 		}.join '&'
 
 		open "http://lingr.com/api/room/say?#{query_string}"
+	end
+end
+
+def post_slack_help(channel, query, vimhelp)
+	Thread.start do
+  url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
+# 		url = "http://vim-help-jp.herokuapp.com/?query=#{ERB::Util.url_encode query}"
+		help = vimhelp.search(query, "Not found.")
+		result = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp.slice(0, 1000)
+# 		result = (url + "\n" + help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
+# 		result = (help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
+		param = {
+      token: ENV['SLACK_API_TOKEN'],
+			channel: channel,
+			text: result,
+			username: 'vimhelp-jp',
+      icon_url: ENV['SLACK_BOT_ICON_URL']
+		}
+
+		query_string = param.map {|e|
+			e.map {|s| ERB::Util.url_encode s.to_s }.join '='
+		}.join '&'
+
+		open "https://slack.com/api/chat.postMessage?#{query_string}&pretty=1"
 	end
 end
 # Slack API URL
@@ -152,14 +179,15 @@ end
 # ]
 #
 post '/lingr/vimhelpjp' do
-	content_type :text
+  content_type :text
 	json = JSON.parse(request.body.string)
-	json["events"].select {|e| e['message'] }.map {|e|
+  json["events"].select {|e| e['message'] }.map {|e|
 		text = e["message"]["text"]
 		room = e["message"]["room"]
 		
 		if /^:h[\s　]+(.+)/ =~ text
 			query = text[/^:h[\s　]+(.+)/, 1]
+      open "http://lingr.com/api/room/say?room=#{room}&bot=vimhelpjp_test&text=#{json}&bot_verifier=260189b9b8ec77ca29bfde5caf72ced9f30d0817"
 			post_lingr_help(room, query, vimhelp)
 		end
 
@@ -171,7 +199,23 @@ post '/lingr/vimhelpjp' do
 	return ""
 end
 
+post '/slack/vimhelpjp' do
+  content_type :text
+  uri = Addressable::URI.parse("#{request.url}?#{request.body.string}")
 
+  text = uri.query_values['text']
+  if /^:h[\s　]+(.+)/ =~ text
+    query = text[/^:h[\s　]+(.+)/, 1]
+  elsif /^:he[\s　]+(.+)/ =~ text
+    query = text[/^:he[\s　]+(.+)/, 1]
+  elsif /^:help[\s　]+(.+)/ =~ text
+    query = text[/^:help[\s　]+(.+)/, 1]
+  end
+  
+  channel = uri.query_values['channel_id']
+
+  post_slack_help(channel, query, vimhelp)
+end
 
 # ?query={}
 get '/vimdoc/' do

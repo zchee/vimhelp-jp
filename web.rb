@@ -147,10 +147,12 @@ def post_slack_help(channel, query, vimhelp)
 
     results = []
     if result_raw.length >= 1400
-      results.push result_raw.slice(0, 1400)
-      results.push result_raw.slice(1400, 2800)
+      result_count = result_raw.length / 1400 + 1
+      for i in 1..result_count do
+        results.push result_raw.slice((i - 1) * 1400, i * 1400)
+      end
     else
-      results.push result_raw.slice(0, 1400)
+      results.push result_raw
     end
 
     for result in results.each do

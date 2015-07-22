@@ -46,3 +46,45 @@
 [submodule "plugins/vimproc.vim"]
 	path = plugins/vimproc.vim
 	url = https://github.com/Shougo/vimproc.vim
+[submodule "plugins/neosnippet-snippets"]
+	path = plugins/neosnippet-snippets
+	url = git@github.com:Shougo/neosnippet-snippets.git
+[submodule "plugins/deoplete.nvim"]
+	path = plugins/deoplete.nvim
+	url = git@github.com:Shougo/deoplete.nvim.git
+[submodule "plugins/vim-gista"]
+	path = plugins/vim-gista
+	url = git@github.com:lambdalisue/vim-gista.git
+[submodule "plugins/vim-gita"]
+	path = plugins/vim-gita
+	url = git@github.com:lambdalisue/vim-gita.git
+[submodule "plugins/ctrlp.vim"]
+	path = plugins/ctrlp.vim
+	url = git@github.com:ctrlpvim/ctrlp.vim.git
+[submodule "plugins/vim-textobj-fold"]
+	path = plugins/vim-textobj-fold
+	url = git@github.com:kana/vim-textobj-fold.git
+[submodule "plugins/vim-textobj-indent"]
+	path = plugins/vim-textobj-indent
+	url = git@github.com:kana/vim-textobj-indent.git
+[submodule "plugins/vim-textobj-lastpat"]
+	path = plugins/vim-textobj-lastpat
+	url = git@github.com:kana/vim-textobj-lastpat.git
+[submodule "plugins/neco-vim"]
+	path = plugins/neco-vim
+	url = git@github.com:Shougo/neco-vim.git
+[submodule "plugins/unite-outline"]
+	path = plugins/unite-outline
+	url = git@github.com:Shougo/unite-outline.git
+[submodule "plugins/vim-themis"]
+	path = plugins/vim-themis
+	url = git@github.com:thinca/vim-themis.git
+[submodule "plugins/open-browser-github.vim"]
+	path = plugins/open-browser-github.vim
+	url = git@github.com:tyru/open-browser-github.vim.git
+[submodule "plugins/open-browser.vim"]
+	path = plugins/open-browser.vim
+	url = git@github.com:tyru/open-browser.vim.git
+[submodule "plugins/jedi-vim"]
+	path = plugins/jedi-vim
+	url = git@github.com:davidhalter/jedi-vim.git

@@ -20,14 +20,13 @@ configure do
   use Rack::CommonLogger, file
 end
 
-
 # set :markdown, :layout_engine => :haml, :layout => :pos
 
 
 load "vimhelp.rb"
 
 $stdout.sync = true
-# Disable only serving localhost in development mode
+# Disable only serving localhosh in development mode
 set :bind, '0.0.0.0'
 
 

@@ -117,24 +117,36 @@ end
 # -------------------- lingr-bot --------------------
 def post_lingr_help(room, query, vimhelp)
   Thread.start do
-    # url = "http://vim-help-jp.herokuapp.com/##{ERB::Util.url_encode query}"
     url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
     help = vimhelp.search(query, "Not found.")
-    # result = (url + "\n" + help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
-    # result = (help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
-    result = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp.slice(0, 1000)
-    param = {
-      room: room,
-      text: result,
-      bot_id: ENV['LINGR_BOT_ID'],
-      bot_secret: ENV['LINGR_BOT_SECRET']
-    }.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot_id] + p[:bot_secret]) }
+    result_raw = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp
+    # logger.info result_raw
 
-    query_string = param.map {|e|
-      e.map {|s| ERB::Util.url_encode s.to_s }.join '='
-    }.join '&'
+    results = []
+    if result_raw.length >= 1000
+      result_count = result_raw.length / 1000 + 1
+      for i in 1..result_count do
+        results.push result_raw.slice( ( ( i - 1 ) * 1000 )...( i * 1000 ) )
+      end
+    else
+      results.push result_raw
+    end
 
-    open "http://lingr.com/api/room/say?#{query_string}"
+    for result in results.each do
+      param = {
+        room: room,
+        bot: ENV['LINGR_BOT_ID'],
+        text: result,
+        bot_verifier: ENV['LINGR_BOT_KEY']
+      }.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot] + p[:bot_verifier]) }
+
+      query_string = param.map {|e|
+        e.map {|s| ERB::Util.url_encode s.to_s }.join '='
+      }.join '&'
+
+      open "http://lingr.com/api/room/say?#{query_string}"
+    end
+
   end
 end
 
@@ -143,12 +155,13 @@ def post_slack_help(channel, query, vimhelp)
     url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
     help = vimhelp.search(query, "Not found.")
     result_raw = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp
+    # logger.info result_raw
 
     results = []
     if result_raw.length >= 1400
       result_count = result_raw.length / 1400 + 1
       for i in 1..result_count do
-        results.push result_raw.slice((i - 1) * 1400, i * 1400)
+        results.push result_raw.slice( ( (i - 1) * 1400 )...( i * 1400 ) )
       end
     else
       results.push result_raw
@@ -173,24 +186,24 @@ def post_slack_help(channel, query, vimhelp)
 end
 
 post '/lingr/vimhelpjp' do
+  logger.info "loading data"
   content_type :text
   json = JSON.parse(request.body.string)
   json["events"].select {|e| e['message'] }.map {|e|
     text = e["message"]["text"]
     room = e["message"]["room"]
 
-    if /^:h[\s　]+(.+)/ =~ text
-      query = text[/^:h[\s　]+(.+)/, 1]
+    if /^:nh[\s　]+(.+)/ =~ text
+      query = text[/^:nh[\s　]+(.+)/, 1]
       # open "http://lingr.com/api/room/say?room=#{room}&bot=vimhelpjp_test&text=#{json}&bot_verifier=260189b9b8ec77ca29bfde5caf72ced9f30d0817"
       post_lingr_help(room, query, vimhelp)
     end
 
-    if /^:help[\s　]+(.+)/ =~ text
-      query = text[/^:help[\s　]+(.+)/, 1]
-      # post_lingr_help(room, query, vimhelp)
+    if /^:nhelp[\s　]+(.+)/ =~ text
+      query = text[/^:nhelp[\s　]+(.+)/, 1]
+      post_lingr_help(room, query, vimhelp)
     end
   }
-  # post_lingr_help(room, query, vimhelp)
   return ""
 end
 

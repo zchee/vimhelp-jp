@@ -12,4 +12,7 @@ RUN mkdir /usr/src/app/log
 RUN touch /usr/src/app/log/development.log
 
 EXPOSE 80
+ENV PORT 80
+
 CMD ["/usr/local/bundle/bin/foreman", "start", "-d","/usr/src/app", "-p", "80"]
+

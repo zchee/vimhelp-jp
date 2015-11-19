@@ -238,6 +238,7 @@ g:ref_erlang_cmd	vim-ref/doc/ref-erlang.jax	/*g:ref_erlang_cmd@ja*
 g:ref_erlang_man_dir	vim-ref/doc/ref-erlang.jax	/*g:ref_erlang_man_dir@ja*
 g:ref_man_cmd	vim-ref/doc/ref-man.jax	/*g:ref_man_cmd@ja*
 g:ref_man_lang	vim-ref/doc/ref-man.jax	/*g:ref_man_lang@ja*
+g:ref_man_manpath	vim-ref/doc/ref-man.jax	/*g:ref_man_manpath@ja*
 g:ref_no_default_key_mappings	vim-ref/doc/ref.jax	/*g:ref_no_default_key_mappings@ja*
 g:ref_noenter	vim-ref/doc/ref.jax	/*g:ref_noenter@ja*
 g:ref_open	vim-ref/doc/ref.jax	/*g:ref_open@ja*
@@ -2347,11 +2348,13 @@ $VIMRUNTIME	vimdoc-ja/doc/starting.jax	/*$VIMRUNTIME@ja*
 :cclose	vimdoc-ja/doc/quickfix.jax	/*:cclose@ja*
 :cd	vimdoc-ja/doc/editing.jax	/*:cd@ja*
 :cd-	vimdoc-ja/doc/editing.jax	/*:cd-@ja*
+:cdo	vimdoc-ja/doc/quickfix.jax	/*:cdo@ja*
 :ce	vimdoc-ja/doc/change.jax	/*:ce@ja*
 :center	vimdoc-ja/doc/change.jax	/*:center@ja*
 :cex	vimdoc-ja/doc/quickfix.jax	/*:cex@ja*
 :cexpr	vimdoc-ja/doc/quickfix.jax	/*:cexpr@ja*
 :cf	vimdoc-ja/doc/quickfix.jax	/*:cf@ja*
+:cfdo	vimdoc-ja/doc/quickfix.jax	/*:cfdo@ja*
 :cfile	vimdoc-ja/doc/quickfix.jax	/*:cfile@ja*
 :cfir	vimdoc-ja/doc/quickfix.jax	/*:cfir@ja*
 :cfirst	vimdoc-ja/doc/quickfix.jax	/*:cfirst@ja*
@@ -2460,6 +2463,7 @@ $VIMRUNTIME	vimdoc-ja/doc/starting.jax	/*$VIMRUNTIME@ja*
 :delm	vimdoc-ja/doc/motion.jax	/*:delm@ja*
 :delmarks	vimdoc-ja/doc/motion.jax	/*:delmarks@ja*
 :di	vimdoc-ja/doc/change.jax	/*:di@ja*
+:dif	vimdoc-ja/doc/diff.jax	/*:dif@ja*
 :diffg	vimdoc-ja/doc/diff.jax	/*:diffg@ja*
 :diffget	vimdoc-ja/doc/diff.jax	/*:diffget@ja*
 :diffo	vimdoc-ja/doc/diff.jax	/*:diffo@ja*
@@ -2472,7 +2476,6 @@ $VIMRUNTIME	vimdoc-ja/doc/starting.jax	/*$VIMRUNTIME@ja*
 :diffsplit	vimdoc-ja/doc/diff.jax	/*:diffsplit@ja*
 :difft	vimdoc-ja/doc/diff.jax	/*:difft@ja*
 :diffthis	vimdoc-ja/doc/diff.jax	/*:diffthis@ja*
-:diffu	vimdoc-ja/doc/diff.jax	/*:diffu@ja*
 :diffupdate	vimdoc-ja/doc/diff.jax	/*:diffupdate@ja*
 :dig	vimdoc-ja/doc/digraph.jax	/*:dig@ja*
 :digraphs	vimdoc-ja/doc/digraph.jax	/*:digraphs@ja*
@@ -2696,6 +2699,7 @@ $VIMRUNTIME	vimdoc-ja/doc/starting.jax	/*$VIMRUNTIME@ja*
 :lclose	vimdoc-ja/doc/quickfix.jax	/*:lclose@ja*
 :lcs	vimdoc-ja/doc/if_cscop.jax	/*:lcs@ja*
 :lcscope	vimdoc-ja/doc/if_cscop.jax	/*:lcscope@ja*
+:ldo	vimdoc-ja/doc/quickfix.jax	/*:ldo@ja*
 :le	vimdoc-ja/doc/change.jax	/*:le@ja*
 :left	vimdoc-ja/doc/change.jax	/*:left@ja*
 :lefta	vimdoc-ja/doc/windows.jax	/*:lefta@ja*
@@ -2714,6 +2718,7 @@ $VIMRUNTIME	vimdoc-ja/doc/starting.jax	/*$VIMRUNTIME@ja*
 :lex	vimdoc-ja/doc/quickfix.jax	/*:lex@ja*
 :lexpr	vimdoc-ja/doc/quickfix.jax	/*:lexpr@ja*
 :lf	vimdoc-ja/doc/quickfix.jax	/*:lf@ja*
+:lfdo	vimdoc-ja/doc/quickfix.jax	/*:lfdo@ja*
 :lfile	vimdoc-ja/doc/quickfix.jax	/*:lfile@ja*
 :lfir	vimdoc-ja/doc/quickfix.jax	/*:lfir@ja*
 :lfirst	vimdoc-ja/doc/quickfix.jax	/*:lfirst@ja*
@@ -4630,7 +4635,6 @@ E839	vimdoc-ja/doc/insert.jax	/*E839@ja*
 E84	vimdoc-ja/doc/windows.jax	/*E84@ja*
 E840	vimdoc-ja/doc/insert.jax	/*E840@ja*
 E841	vimdoc-ja/doc/map.jax	/*E841@ja*
-E842	vimdoc-ja/doc/cmdline.jax	/*E842@ja*
 E843	vimdoc-ja/doc/editing.jax	/*E843@ja*
 E844	vimdoc-ja/doc/syntax.jax	/*E844@ja*
 E845	vimdoc-ja/doc/spell.jax	/*E845@ja*
@@ -4679,6 +4683,7 @@ E886	vimdoc-ja/doc/starting.jax	/*E886@ja*
 E887	vimdoc-ja/doc/if_pyth.jax	/*E887@ja*
 E888	vimdoc-ja/doc/pattern.jax	/*E888@ja*
 E89	vimdoc-ja/doc/message.jax	/*E89@ja*
+E890	vimdoc-ja/doc/syntax.jax	/*E890@ja*
 E90	vimdoc-ja/doc/message.jax	/*E90@ja*
 E91	vimdoc-ja/doc/options.jax	/*E91@ja*
 E92	vimdoc-ja/doc/message.jax	/*E92@ja*
@@ -4806,6 +4811,7 @@ OffTheSpot	vimdoc-ja/doc/mbyte.jax	/*OffTheSpot@ja*
 OnTheSpot	vimdoc-ja/doc/mbyte.jax	/*OnTheSpot@ja*
 Operator-pending	vimdoc-ja/doc/intro.jax	/*Operator-pending@ja*
 Operator-pending-mode	vimdoc-ja/doc/intro.jax	/*Operator-pending-mode@ja*
+OptionSet	vimdoc-ja/doc/autocmd.jax	/*OptionSet@ja*
 OverTheSpot	vimdoc-ja/doc/mbyte.jax	/*OverTheSpot@ja*
 P	vimdoc-ja/doc/change.jax	/*P@ja*
 PATHEXT	vimdoc-ja/doc/eval.jax	/*PATHEXT@ja*
@@ -5703,9 +5709,11 @@ diff-mode	vimdoc-ja/doc/diff.jax	/*diff-mode@ja*
 diff-options	vimdoc-ja/doc/diff.jax	/*diff-options@ja*
 diff-original-file	vimdoc-ja/doc/diff.jax	/*diff-original-file@ja*
 diff-patchexpr	vimdoc-ja/doc/diff.jax	/*diff-patchexpr@ja*
+diff-slow	vimdoc-ja/doc/diff.jax	/*diff-slow@ja*
 diff.txt	vimdoc-ja/doc/diff.jax	/*diff.txt@ja*
 diff_filler()	vimdoc-ja/doc/eval.jax	/*diff_filler()@ja*
 diff_hlID()	vimdoc-ja/doc/eval.jax	/*diff_hlID()@ja*
+diff_translations	vimdoc-ja/doc/diff.jax	/*diff_translations@ja*
 digraph	vimdoc-ja/doc/digraph.jax	/*digraph@ja*
 digraph-arg	vimdoc-ja/doc/change.jax	/*digraph-arg@ja*
 digraph-encoding	vimdoc-ja/doc/digraph.jax	/*digraph-encoding@ja*
@@ -5917,6 +5925,7 @@ extension-removal	vimdoc-ja/doc/cmdline.jax	/*extension-removal@ja*
 f	vimdoc-ja/doc/motion.jax	/*f@ja*
 faq	vimdoc-ja/doc/intro.jax	/*faq@ja*
 farsi	vimdoc-ja/doc/farsi.jax	/*farsi@ja*
+farsi-fonts	vimdoc-ja/doc/farsi.jax	/*farsi-fonts@ja*
 farsi.txt	vimdoc-ja/doc/farsi.jax	/*farsi.txt@ja*
 fasm.vim	vimdoc-ja/doc/syntax.jax	/*fasm.vim@ja*
 fcs_choice-variable	vimdoc-ja/doc/eval.jax	/*fcs_choice-variable@ja*
@@ -6963,6 +6972,7 @@ lcs-eol	vimdoc-ja/doc/options.jax	/*lcs-eol@ja*
 lcs-extends	vimdoc-ja/doc/options.jax	/*lcs-extends@ja*
 lcs-nbsp	vimdoc-ja/doc/options.jax	/*lcs-nbsp@ja*
 lcs-precedes	vimdoc-ja/doc/options.jax	/*lcs-precedes@ja*
+lcs-space	vimdoc-ja/doc/options.jax	/*lcs-space@ja*
 lcs-tab	vimdoc-ja/doc/options.jax	/*lcs-tab@ja*
 lcs-trail	vimdoc-ja/doc/options.jax	/*lcs-trail@ja*
 left-right-motions	vimdoc-ja/doc/motion.jax	/*left-right-motions@ja*
@@ -8631,6 +8641,9 @@ v:mouse_lnum	vimdoc-ja/doc/eval.jax	/*v:mouse_lnum@ja*
 v:mouse_win	vimdoc-ja/doc/eval.jax	/*v:mouse_win@ja*
 v:oldfiles	vimdoc-ja/doc/eval.jax	/*v:oldfiles@ja*
 v:operator	vimdoc-ja/doc/eval.jax	/*v:operator@ja*
+v:option_new	vimdoc-ja/doc/eval.jax	/*v:option_new@ja*
+v:option_old	vimdoc-ja/doc/eval.jax	/*v:option_old@ja*
+v:option_type	vimdoc-ja/doc/eval.jax	/*v:option_type@ja*
 v:prevcount	vimdoc-ja/doc/eval.jax	/*v:prevcount@ja*
 v:profiling	vimdoc-ja/doc/eval.jax	/*v:profiling@ja*
 v:progname	vimdoc-ja/doc/eval.jax	/*v:progname@ja*
@@ -8662,11 +8675,13 @@ v_<Esc>	vimdoc-ja/doc/visual.jax	/*v_<Esc>@ja*
 v_=	vimdoc-ja/doc/change.jax	/*v_=@ja*
 v_>	vimdoc-ja/doc/change.jax	/*v_>@ja*
 v_C	vimdoc-ja/doc/change.jax	/*v_C@ja*
+v_CTRL-A	vimdoc-ja/doc/change.jax	/*v_CTRL-A@ja*
 v_CTRL-C	vimdoc-ja/doc/visual.jax	/*v_CTRL-C@ja*
 v_CTRL-G	vimdoc-ja/doc/visual.jax	/*v_CTRL-G@ja*
 v_CTRL-H	vimdoc-ja/doc/change.jax	/*v_CTRL-H@ja*
 v_CTRL-O	vimdoc-ja/doc/visual.jax	/*v_CTRL-O@ja*
 v_CTRL-V	vimdoc-ja/doc/visual.jax	/*v_CTRL-V@ja*
+v_CTRL-X	vimdoc-ja/doc/change.jax	/*v_CTRL-X@ja*
 v_CTRL-Z	vimdoc-ja/doc/starting.jax	/*v_CTRL-Z@ja*
 v_CTRL-\_CTRL-G	vimdoc-ja/doc/intro.jax	/*v_CTRL-\\_CTRL-G@ja*
 v_CTRL-\_CTRL-N	vimdoc-ja/doc/intro.jax	/*v_CTRL-\\_CTRL-N@ja*
@@ -8722,7 +8737,9 @@ v_gJ	vimdoc-ja/doc/change.jax	/*v_gJ@ja*
 v_gN	vimdoc-ja/doc/visual.jax	/*v_gN@ja*
 v_gV	vimdoc-ja/doc/visual.jax	/*v_gV@ja*
 v_g]	vimdoc-ja/doc/tagsrch.jax	/*v_g]@ja*
+v_g_CTRL-A	vimdoc-ja/doc/change.jax	/*v_g_CTRL-A@ja*
 v_g_CTRL-G	vimdoc-ja/doc/editing.jax	/*v_g_CTRL-G@ja*
+v_g_CTRL-X	vimdoc-ja/doc/change.jax	/*v_g_CTRL-X@ja*
 v_g_CTRL-]	vimdoc-ja/doc/tagsrch.jax	/*v_g_CTRL-]@ja*
 v_gf	vimdoc-ja/doc/editing.jax	/*v_gf@ja*
 v_gn	vimdoc-ja/doc/visual.jax	/*v_gn@ja*

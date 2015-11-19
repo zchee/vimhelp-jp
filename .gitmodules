@@ -88,3 +88,9 @@
 [submodule "plugins/jedi-vim"]
 	path = plugins/jedi-vim
 	url = git@github.com:davidhalter/jedi-vim.git
+[submodule "vendor/neovim"]
+	path = vendor/neovim
+	url = https://github.com/neovim/neovim.git
+[submodule "vendor/vim"]
+	path = vendor/vim
+	url = https://github.com/vim/vim.git

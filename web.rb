@@ -117,18 +117,18 @@ end
 # -------------------- lingr-bot --------------------
 def post_lingr_help(room, query, vimhelp)
 	Thread.start do
-  url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
-# 		url = "http://vim-help-jp.herokuapp.com/?query=#{ERB::Util.url_encode query}"
+    # url = "http://vim-help-jp.herokuapp.com/##{ERB::Util.url_encode query}"
+    url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
 		help = vimhelp.search(query, "Not found.")
+    # result = (url + "\n" + help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
+    # result = (help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
 		result = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp.slice(0, 1000)
-# 		result = (url + "\n" + help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
-# 		result = (help[:vimdoc_url] + "\n" + help[:text].gsub(/^$/, "　")).slice(0, 1000)
 		param = {
 			room: room,
-			bot: 'vimhelpjp_test',
 			text: result,
-			bot_verifier: ENV['LINGR_BOT_KEY']
-		}.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot] + p[:bot_verifier]) }
+			bot_id: ENV['LINGR_BOT_ID'],
+			bot_secret: ENV['LINGR_BOT_SECRET']
+		}.tap {|p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot_id] + p[:bot_secret]) }
 
 		query_string = param.map {|e|
 			e.map {|s| ERB::Util.url_encode s.to_s }.join '='
@@ -181,15 +181,16 @@ post '/lingr/vimhelpjp' do
 		
 		if /^:h[\s　]+(.+)/ =~ text
 			query = text[/^:h[\s　]+(.+)/, 1]
-      open "http://lingr.com/api/room/say?room=#{room}&bot=vimhelpjp_test&text=#{json}&bot_verifier=260189b9b8ec77ca29bfde5caf72ced9f30d0817"
+      # open "http://lingr.com/api/room/say?room=#{room}&bot=vimhelpjp_test&text=#{json}&bot_verifier=260189b9b8ec77ca29bfde5caf72ced9f30d0817"
 			post_lingr_help(room, query, vimhelp)
 		end
 
 		if /^:help[\s　]+(.+)/ =~ text
 			query = text[/^:help[\s　]+(.+)/, 1]
-			post_lingr_help(room, query, vimhelp)
+			# post_lingr_help(room, query, vimhelp)
 		end
 	}
+	# post_lingr_help(room, query, vimhelp)
 	return ""
 end
 

@@ -1,5 +1,9 @@
 bot:
   build: .
+  environment:
+    - VIRTUAL_HOST=vimconf2015.zchee.io
+    - VIRTUAL_PORT=80
+    - VIMHELP_URL=http://vimconf2015.zchee.io/
   env_file:
     - .env
   restart: always

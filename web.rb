@@ -195,7 +195,6 @@ post '/lingr/vimhelpjp' do
 
     if /^:nh[\s　]+(.+)/ =~ text
       query = text[/^:nh[\s　]+(.+)/, 1]
-      # open "http://lingr.com/api/room/say?room=#{room}&bot=vimhelpjp_test&text=#{json}&bot_verifier=260189b9b8ec77ca29bfde5caf72ced9f30d0817"
       post_lingr_help(room, query, vimhelp)
     end
 

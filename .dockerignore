@@ -1,3 +1,4 @@
 vendor/
 !vendor/neovim/runtime/doc
 !vendor/vim/runtime/doc
+docker-compose.yml

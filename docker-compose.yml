@@ -1,9 +1,33 @@
 bot:
+  container_name: vimhelpjp-bot
   build: .
   environment:
-    - VIRTUAL_HOST=vimconf2015.zchee.io
+    - VIRTUAL_HOST=vimhelp-jp.zchee.io
     - VIRTUAL_PORT=80
-    - VIMHELP_URL=http://vimconf2015.zchee.io/
+    - VIMHELP_URL=http://vimhelp-jp.zchee.io/
+    - SLACK_API_BOT_ICON_URL=http://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg
   env_file:
     - .env
   restart: always
+
+dev:
+  container_name: vimhelpjp-dev
+  build: .
+  volumes_from:
+    - vimhelp-jp-submodules
+  environment:
+    - VIRTUAL_HOST=vimhelp-jp-dev.zchee.io
+    - VIRTUAL_PORT=80
+    - VIMHELP_URL=http://vimhelp-jp-dev.zchee.io/
+    - SLACK_API_BOT_ICON_URL=http://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg
+  env_file:
+    - .dev.env
+  dns: 
+    - 8.8.8.8
+    - 2001:4860:4860::8888
+  mem_limit: 1000000000
+  memswap_limit: 2000000000
+  restart: always
+  stdin_open: true
+  tty: true
+

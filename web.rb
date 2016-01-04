@@ -193,13 +193,18 @@ post '/lingr/vimhelpjp' do
     text = e["message"]["text"]
     room = e["message"]["room"]
 
-    if /^:nh[\s　]+(.+)/ =~ text
-      query = text[/^:nh[\s　]+(.+)/, 1]
+    if /^:h[\s　]+(.+)/ =~ text
+      query = text[/^:h[\s　]+(.+)/, 1]
       post_lingr_help(room, query, vimhelp)
     end
 
-    if /^:nhelp[\s　]+(.+)/ =~ text
-      query = text[/^:nhelp[\s　]+(.+)/, 1]
+    if /^:he[\s　]+(.+)/ =~ text
+      query = text[/^:he[\s　]+(.+)/, 1]
+      post_lingr_help(room, query, vimhelp)
+    end
+
+    if /^:help[\s　]+(.+)/ =~ text
+      query = text[/^:help[\s　]+(.+)/, 1]
       post_lingr_help(room, query, vimhelp)
     end
   }

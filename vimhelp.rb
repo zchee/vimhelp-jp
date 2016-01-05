@@ -37,14 +37,14 @@ class VimHelp
 		@tagfile = tagfiles.map { |file|
 			File.readlines(root + "/" + file, :encoding => Encoding::UTF_8)
 		}.flatten
-		
+
 		@tags = @tagfile.map { |line| line[/([^\t]*)\t.*/, 1] }
 		@root = root
 	end
 
 	def load_help_file(root, file)
 		if !@help_files.has_key? file
-			# :invalid byte sequence in UTF-8 
+			# :invalid byte sequence in UTF-8
 			# http://qa.atmarkit.co.jp/q/76
 			@help_files[file] = File.readlines(root + "/" + file, :encoding => Encoding::UTF_8).map{ | item |
 				item.encode("UTF-16BE", "UTF-8", :invalid => :replace, :undef => :replace, :replace => '?').encode("UTF-8")
@@ -52,7 +52,7 @@ class VimHelp
 		end
 		return @help_files[file]
 	end
-	
+
 	def search(query, default = "")
 		result = self.search_tag(vim_escape(query))
 		if result.empty?

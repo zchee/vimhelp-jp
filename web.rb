@@ -31,7 +31,7 @@ set :bind, '0.0.0.0'
 
 
 
-root = "plugins"
+root = "/usr/src/doc"
 tagfiles = ["tags-ja", "tags"]
 
 vimhelp = VimHelp.new(root, tagfiles)
@@ -69,7 +69,7 @@ post '/search' do
     if title.empty?
       query
     else
-      escape_query = CGI.escapeHTML query 
+      escape_query = CGI.escapeHTML query
       "<a class=\"tag_keyword\" data-keyword=\"#{ escape_query }\" title=\"#{ CGI.escapeHTML title }\">#{ escape_query }</a>"
     end
   }

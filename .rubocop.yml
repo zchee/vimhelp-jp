@@ -1,3 +1,6 @@
+# target_version:
+#   rubocop v0.35.1
+
 # https://gist.github.com/onk/38bfbd78899d892e0e83/revisions
 # 自動生成されるものはチェック対象から除外する
 AllCops:

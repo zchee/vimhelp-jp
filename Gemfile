@@ -1,5 +1,4 @@
-# source 'https://rubygems.org'
-source 'http://bundler-api.herokuapp.com'
+source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'haml'

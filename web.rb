@@ -14,7 +14,7 @@ require "addressable/uri"
 
 configure do
   # logging is enabled by default in classic style applications,
-  # so `enable :logging` is not needed
+  # So, `enable :logging` is not needed
   file = File.new("#{settings.root}/log/#{settings.environment}.log", "a+")
   file.sync = true
   use Rack::CommonLogger, file
@@ -109,7 +109,6 @@ post "/search" do
   text = text.gsub(/\|(.+?)\||(&#39;[[:alpha:]]+?&#39;)|(&lt;[[:alpha:]]+?&gt;)|(\w+\(\))/) do |_text|
     query = CGI.unescapeHTML(Regexp.last_match(1) ? Regexp.last_match(1) : Regexp.last_match(2) ? Regexp.last_match(2) : Regexp.last_match(3) ? Regexp.last_match(3) : Regexp.last_match(4))
     title = vimhelp.search(query)[:text].sub(/^.*\n/, "").gsub(/　+|\s+|\t+\n/, " ").slice(0, 200)
-    # title = result[:text].gsub(/　+|\s+|\t+\n/, " ").slice(0, 200)
     if title.empty?
       query
     else
@@ -171,7 +170,6 @@ def post_lingr_help(room, query, vimhelp)
     url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
     help = vimhelp.search(query, "Not found.")
     result_raw = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp
-    # logger.info result_raw
 
     results = []
     if result_raw.length >= 1000
@@ -205,7 +203,6 @@ def post_slack_help(channel, query, vimhelp)
     url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"
     help = vimhelp.search(query, "Not found.")
     result_raw = (url + "\n" + help[:text].gsub(/^$/, "　")).chomp("　\n").chomp
-    # logger.info result_raw
 
     results = []
     if result_raw.length >= 1400

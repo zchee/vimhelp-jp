@@ -124,26 +124,23 @@ post "/lingr/vimhelpjp" do
   logger.info "loading data"
   content_type :text
   json = JSON.parse(request.body.string)
+
   json["events"].select { |e| e["message"] }.map do|e|
     text = e["message"]["text"]
     room = e["message"]["room"]
 
-    if /^:h[\s　]+(.+)/ =~ text
-      query = text[/^:h[\s　]+(.+)/, 1]
-      post_lingr_help(room, query, vimhelp)
+    if /^:h[\s ]+(.+)/ =~ text
+      query = text[/^:h[\s ]+(.+)/, 1]
+    elsif /^:he[\s ]+(.+)/ =~ text
+      query = text[/^:he[\s ]+(.+)/, 1]
+    elsif /^:help[\s ]+(.+)/ =~ text
+      query = text[/^:help[\s ]+(.+)/, 1]
     end
 
-    if /^:he[\s　]+(.+)/ =~ text
-      query = text[/^:he[\s　]+(.+)/, 1]
-      post_lingr_help(room, query, vimhelp)
-    end
-
-    if /^:help[\s　]+(.+)/ =~ text
-      query = text[/^:help[\s　]+(.+)/, 1]
-      post_lingr_help(room, query, vimhelp)
-    end
+    post_lingr_help(room, query, vimhelp)
+    return ""
   end
-  return ""
+
 end
 
 post "/slack/vimhelpjp" do
@@ -151,12 +148,12 @@ post "/slack/vimhelpjp" do
   uri = Addressable::URI.parse("#{request.url}?#{request.body.string}")
 
   text = uri.query_values["text"]
-  if /^:h[\s　]+(.+)/ =~ text
-    query = text[/^:h[\s　]+(.+)/, 1]
-  elsif /^:he[\s　]+(.+)/ =~ text
-    query = text[/^:he[\s　]+(.+)/, 1]
-  elsif /^:help[\s　]+(.+)/ =~ text
-    query = text[/^:help[\s　]+(.+)/, 1]
+  if /^:h[\s ]+(.+)/ =~ text
+    query = text[/^:h[\s ]+(.+)/, 1]
+  elsif /^:he[\s ]+(.+)/ =~ text
+    query = text[/^:he[\s ]+(.+)/, 1]
+  elsif /^:help[\s ]+(.+)/ =~ text
+    query = text[/^:help[\s ]+(.+)/, 1]
   end
 
   channel = uri.query_values["channel_id"]

@@ -30,7 +30,6 @@ dev:
   tty: true
 
 vimhelp_jp-submodules:
-  container_name: vimhelp_jp-submodules
   image: zchee/vimhelp_jp-submodules
   dns:
     - 8.8.8.8

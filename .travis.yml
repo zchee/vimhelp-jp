@@ -13,6 +13,7 @@ matrix:
     - DOCKER_VERSION=1.9.1
     - DOCKER_INSTALL_URL="get.docker.com/builds/$(uname -s)/$(uname -m)"
     - DOCKER_COMPOSE_VERSION=1.5.2
+    - COMPOSE_FILE=ci/docker-compose.travis.yml
 
 before_install:
 # Install latest stable docker

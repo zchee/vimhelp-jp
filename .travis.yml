@@ -1,0 +1,46 @@
+services:
+  - docker
+
+language: ruby
+
+matrix:
+  include:
+
+  - sudo: required
+    dist: trusty
+    compiler: clang
+    env:
+    - DOCKER_VERSION=1.9.1
+    - DOCKER_INSTALL_URL="get.docker.com/builds/$(uname -s)/$(uname -m)"
+    - DOCKER_COMPOSE_VERSION=1.5.2
+
+before_install:
+# Install latest stable docker
+  - sudo service docker stop
+  - sudo rm $(which -a docker)
+  - curl -L https://${DOCKER_INSTALL_URL}/docker-${DOCKER_VERSION} > docker
+  - chmod +x docker
+  - sudo mv docker /usr/bin
+  - sudo service docker start; sleep 3
+# Install latest docker-compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+# Check version
+  - docker version
+  - docker info
+  - docker-compose version
+# Pull submodule container
+  - docker pull zchee/vimhelp_jp-submodules
+
+script:
+  - docker-compose build dev
+  - docker-compose up -d dev; sleep 3
+  - docker logs vimhelp_jp_dev
+
+notifications:
+  email: false
+  slack:
+    rooms:
+      secure: bkNhrUmrZCxknDC0F6waVE7CqZf/h/vMig7h3KZBtwRmj3xBVHO8f0+Lw0FanvO5zD0OjpA7Z8ayDIbPSpXdfu3mrUX5NKGj0v6e9sQ3vtIoQ+2z1rHbBSpY4Wr3FV2xefFwnOypv0QVBwj7gWCBH87d6ZgZVzGEhSXpf6pZ34GaEoTwMXA753kE0iSF46VXMl5tS2QJcNuSxLtdglka2Pd5Yl1msrJuU1YdFzTdN29y3/T+2pGfEG7R5sJTxNCS1zBzhN77UmV91JZl2WTbs7UNWcfMttQIg+MXiOFnaZE4pYp+r1ynaw47eu7vMitH28S7Ns+h72o5gqfB81ykE3Ce+RAyKkalnJZQjujmNmN/+mLkQ9l/7AqBoSsTGXxw3kjm5jvRaQq1GNoVopYpc26El3E/vX0JSNpeEy7ASi78555Wl1j2iTD1evXH+dPA1OjX1xB54Vvt1r31dCP67xRS82Ehpbmbb4Qh0YEYDEchng15gYP8ew9VMTBK4CinW+hY87B6F+YuQF+xBFEAQe0Q3Rt378b+yv0bdTY0JZk2/4m52roW6BQGQS0mCa/LNrz6uhIlfa2utyII9Gal8ks05ZsGWk4IDTbiND4pYcWYVhmc5FdZLo7jm792lExhieOrP8eRCXBXMKkz6iueISrKny7omo6nC5wAuxMaaS4=

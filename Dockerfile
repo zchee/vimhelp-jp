@@ -7,7 +7,16 @@ WORKDIR /usr/src/app
 # Workaround bundle cache
 COPY Gemfile /usr/src/app/
 COPY Gemfile.lock /usr/src/app/
-RUN bundle install --jobs $(nproc)
+
+RUN set -ex \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends cmake libgit2-dev \
+	&& git clone https://github.com/libgit2/rugged.git \
+	&& cd rugged \
+	&& bundle install \
+	&& rake compile \
+	&& cd ../ \
+	&& bundle install --jobs $(nproc)
 
 # Copy all file
 COPY . /usr/src/app

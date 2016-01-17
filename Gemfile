@@ -5,6 +5,7 @@ gem 'haml'
 gem 'rdiscount'
 gem 'foreman'
 gem 'addressable'
+gem 'rugged', git: 'git://github.com/libgit2/rugged.git', submodules: true
 
 group :development do
   gem 'sinatra-contrib'

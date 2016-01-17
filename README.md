@@ -13,7 +13,7 @@ Support language
 - docker
 - docker-compose
 
-Install plugin repository managed by `git submodule` and `docker volume`
+Install plugin repository managed by `git submodule` and `docker volume`  
 See https://github.com/zchee/vimhelp-jp-submodules
 
 ## Build and run

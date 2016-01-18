@@ -147,8 +147,6 @@ post "/lingr/vimhelpjp" do
     if /^\!vimhelp[\s ]ping/ =~ text
       admins = ENV["LINGR_ADMIN_USERS"]
       if admins.include?(speaker_id)
-        logger.info speaker_id
-        logger.info ENV["LINGR_ADMIN_USERS"]
         message = "pong"
         post_lingr(room, message)
       end

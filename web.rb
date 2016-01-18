@@ -128,17 +128,33 @@ post "/lingr/vimhelpjp" do
   json["events"].select { |e| e["message"] }.map do|e|
     text = e["message"]["text"]
     room = e["message"]["room"]
+    speaker_id = e["message"]["speaker_id"]
 
+    # text = [:h, :he, :help]
+    # TODO: Gather h, he, help
     if /^:h[\s ]+(.+)/ =~ text
       query = text[/^:h[\s ]+(.+)/, 1]
+      post_lingr_help(room, query, vimhelp)
     elsif /^:he[\s ]+(.+)/ =~ text
       query = text[/^:he[\s ]+(.+)/, 1]
+      post_lingr_help(room, query, vimhelp)
     elsif /^:help[\s ]+(.+)/ =~ text
       query = text[/^:help[\s ]+(.+)/, 1]
+      post_lingr_help(room, query, vimhelp)
     end
 
-    post_lingr_help(room, query, vimhelp)
-    return ""
+    # filter of speaker_id
+    if /^\!vimhelp[\s ]ping/ =~ text
+      admins = ENV["LINGR_ADMIN_USERS"]
+      if admins.include?(speaker_id)
+        logger.info speaker_id
+        logger.info ENV["LINGR_ADMIN_USERS"]
+        message = "pong"
+        post_lingr(room, message)
+      end
+    end
+
+    return
   end
 
 end
@@ -162,6 +178,27 @@ post "/slack/vimhelpjp" do
 end
 
 # -------------------- lingr-bot --------------------
+
+# Default reply
+def post_lingr(room, message)
+  Thread.start do
+    param = {
+      room: room,
+      bot: ENV["LINGR_BOT_ID"],
+      text: message,
+      bot_verifier: ENV["LINGR_BOT_KEY"],
+    }.tap { |p| p[:bot_verifier] = Digest::SHA1.hexdigest(p[:bot] + p[:bot_verifier]) }
+
+    query_string = param.map do|e|
+      e.map { |s| ERB::Util.url_encode s.to_s }.join "="
+    end.join "&"
+
+    open "http://lingr.com/api/room/say?#{query_string}"
+  end
+end
+
+# Reply with vimhelp
+# TODO: Refactoring
 def post_lingr_help(room, query, vimhelp)
   Thread.start do
     url = "#{ENV['VIMHELP_URL']}##{ERB::Util.url_encode query}"

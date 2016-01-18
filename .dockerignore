@@ -2,6 +2,7 @@ ci/
 .rubocop.yml
 .travis.yml
 README.md
+Makefile
 docker-compose.yml
 tags
 run.sh

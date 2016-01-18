@@ -1,6 +1,7 @@
 bot:
   container_name: vimhelp_jp_bot
-  build: .
+  build: ../
+  dockerfile: Dockerfile
   environment:
     - VIRTUAL_HOST=vimhelp-jp.zchee.io
     - VIRTUAL_PORT=80
@@ -10,7 +11,8 @@ bot:
 
 dev:
   container_name: vimhelp_jp_dev
-  build: .
+  build: ../
+  dockerfile: Dockerfile
   volumes_from:
     - vimhelp_jp-submodules
   environment:

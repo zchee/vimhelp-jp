@@ -1,2 +1,7 @@
+ci/
+.rubocop.yml
+.travis.yml
+README.md
 docker-compose.yml
 tags
+run.sh

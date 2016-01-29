@@ -11,6 +11,7 @@ require "haml"
 require "sinatra/reloader" if development?
 require "rdiscount"
 require "addressable/uri"
+require "rugged"
 
 configure do
   # logging is enabled by default in classic style applications,
@@ -143,12 +144,38 @@ post "/lingr/vimhelpjp" do
       post_lingr_help(room, query, vimhelp)
     end
 
-    # filter of speaker_id
+    # Filter of speaker_id and ping-pong
     if /^\!vimhelp[\s ]ping/ =~ text
-      admins = ENV["LINGR_ADMIN_USERS"]
-      if admins.include?(speaker_id)
+      Thread.start do
         message = "pong"
         post_lingr(room, message)
+      end
+    end
+
+    # Add plugin use git submodule
+    if /^\!vimhelp[\s ]plugin[\s ]add[\s ]+(.+)/ =~ text
+      admins = ENV["LINGR_ADMIN_USERS"]
+      if admins.include?(speaker_id)
+        plugin = text[/^\!vimhelp[\s ]plugin[\s ]add[\s ]+(.+)/, 1]
+
+        doc = Rugged::Repository.init_at('/usr/src/doc')
+        doc.submodules.add("https://github.com/#{plugin}", "#{plugin}")
+
+        `cd /usr/src/doc && vim -c "source %" -c "qa!" -- update.vim >/dev/null`
+        vimhelp.load(root, tagfiles)
+
+        post_lingr(room, "Added #{plugin} plugin!")
+        logger.info `cd /usr/src/doc && git submodule status`
+        git_commit(plugin)
+      end
+    end
+
+    # filter of speaker_id and pingpong
+    if /^\!vimhelp[\s ]push/ =~ text
+      admins = ENV["LINGR_ADMIN_MASTER"]
+      if admins.include?(speaker_id)
+        repo = Rugged::Repository.new('/usr/src/doc')
+        git_push(repo, 'master')
       end
     end
 
@@ -176,6 +203,57 @@ post "/slack/vimhelpjp" do
 end
 
 # -------------------- lingr-bot --------------------
+
+def git_commit(plugin)
+  Thread.start do
+    logger.info 'Starting git_commit...'
+    @repo = Rugged::Repository.new('/usr/src/doc')
+    index = @repo.index
+    logger.info 'Adding ' + plugin + ' plugin...'
+    index.add_all()
+
+    logger.info 'Commiting ' + plugin + ' plugin...'
+    commit_tree = index.write_tree(@repo)
+    index.write
+
+    commit_author = { email: 'vimhelp@zchee.io', name: 'vimhelp', time: Time.now }
+    Rugged::Commit.create(@repo,
+      author: commit_author,
+      committer: commit_author,
+      message: 'Add ' + plugin + ' plugin submodule',
+      parents: [@repo.head.target],
+      tree: commit_tree,
+      update_ref: 'HEAD'
+    )
+
+    logger.info 'Pushing ' + plugin + ' plugin...'
+    git_push(@repo, 'master')
+
+    logger.info 'Done'
+  end
+end
+
+# http://violetzijing.is-programmer.com/2015/11/6/some_notes_about_rugged.187772.html
+def git_push(repo, branch)
+  # Set refspecs
+  refspecs = ["refs/heads/#{branch}"]
+  # Initialize option and Set credential and merge to options
+  options = {}
+  credentials = ssh_key_credential
+  options.merge!(credentials: credentials)
+  # Push to remote
+  remote = repo.remotes["origin"]
+  remote.push refspecs, options
+end
+
+def ssh_key_credential
+  Rugged::Credentials::SshKey.new({
+    username:   ENV["GIT_SSH_USER"],
+    publickey:  ENV["GIT_SSH_PUBKEY"],
+    privatekey: ENV["GIT_SSH_KEY"],
+    passphrase: ENV["GIT_SSH_PASSPHASE"],
+  })
+end
 
 # Default reply
 def post_lingr(room, message)
